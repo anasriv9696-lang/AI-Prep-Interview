@@ -18,6 +18,7 @@ import CodingInterview from "./pages/CodingInterview";
 import Reports from "./pages/Reports";
 import Roadmap from "./pages/Roadmap";
 import Profile from "./pages/Profile";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import "./App.css";
 
@@ -41,8 +42,8 @@ function App() {
                 path="/forgot-password"
                 element={<ForgotPassword />}
             />
-
-            <Route element={<DashboardLayout />}>
+           <Route element={<ProtectedRoute />}>
+               <Route element={<DashboardLayout />}>
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/interview" element={<Interview />} />
                 <Route path="/resume" element={<ResumeAnalyzer />} />
@@ -52,6 +53,7 @@ function App() {
                 <Route path="/roadmap" element={<Roadmap />} />
                 <Route path="/profile" element={<Profile />} />
             </Route>
+           </Route>
         </Routes>
     );
 }

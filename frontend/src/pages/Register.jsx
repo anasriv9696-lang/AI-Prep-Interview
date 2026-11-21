@@ -1,21 +1,42 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import AuthLayout from "../layouts/AuthLayout";
+import { registerUser } from "../services/auth.service.js";
 
 function Register() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(false);
 
-    function handleRegister(event) {
-        event.preventDefault();
+async function handleRegister(event) {
+    event.preventDefault();
 
-        console.log({
-            name: name,
-            email: email,
-            password: password
-        });
+    setMessage("");
+    setLoading(true);
+
+    try {
+        const userData = {
+            name,
+            email,
+            password
+        };
+
+        const data = await registerUser(userData);
+
+        setMessage(data.message);
+
+        setName("");
+        setEmail("");
+        setPassword("");
+
+    } catch (error) {
+        setMessage(error.message);
+    } finally {
+        setLoading(false);
     }
+}
 
     return (
         <AuthLayout>
@@ -47,8 +68,12 @@ function Register() {
                     required
                 />
 
-                <button type="submit">Create Account</button>
+                <button type="submit" disabled={loading}>
+                {loading ? "Creating Account..." : "Create Account"}
+                </button>
             </form>
+            
+              {message && <p>{message}</p>}
 
             <p>Already registered? <Link to="/login">Login</Link></p>
         </AuthLayout>
